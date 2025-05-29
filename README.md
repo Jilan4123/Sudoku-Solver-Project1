@@ -40,7 +40,7 @@ git clone https://github.com/Jilan4123/Sudoku-Solver-Project1.git
 [Click here to view live](https://jilan4123.github.io/Sudoku-Solver-Project1)
 
 
-> Let me know if you want to deploy this using GitHub Pages — I’ll guide you in 2 minutes!
+✅ This project is live and fully functional — feel free to explore it!
 
 ## 📬 Contact
 
@@ -48,4 +48,4 @@ If you want to connect or ask anything about this project, feel free to message 
 
 ---
 
-Made with 💻 by Jilan
+Made by Jilan
