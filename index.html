@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sudoku Solver</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Sudoku Solver</h1>
+  <hr>
+  <br/>
+   <h5>This Sudoku Solver uses a backtracking algorithm to intelligently complete the grid. Simply enter your known values—even a single row—and let the solver handle the rest.</h5>
+    <button onclick="showRules()" class="rules-btn">View Rules</button>
+    <br/>
+  <form id="sudoku-form">
+    <div class="grid"></div>
+    <button class="solve-btn">Solve Sudoku</button>
+  </form>
+
+  <script>
+    // Create Sudoku grid
+    const grid = document.querySelector('.grid');
+    for (let i = 0; i < 81; i++) {
+      const cell = document.createElement('input');
+      cell.type = 'text';
+      cell.maxLength = 1;
+      cell.pattern = '[1-9]';
+      cell.classList.add('cell');
+      
+      // Add thicker borders for 3x3 boxes
+      if ((i % 9) % 3 === 2 && i % 9 !== 8) cell.classList.add('right-border');
+      if (Math.floor(i / 9) % 3 === 2 && i < 72) cell.classList.add('bottom-border');
+      
+      grid.appendChild(cell);
+    }
+
+    // Check if number can be placed safely
+    function isSafe(board, row, col, num) {
+      // Check row and column
+      for (let i = 0; i < 9; i++) {
+        if (board[row][i] === num || board[i][col] === num) return false;
+      }
+      
+      // Check 3x3 box
+      const boxRow = Math.floor(row / 3) * 3;
+      const boxCol = Math.floor(col / 3) * 3;
+      
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          if (board[boxRow + r][boxCol + c] === num) return false;
+        }
+      }
+      
+      return true;
+    }
+
+    // Main solver function
+    function solve(board) {
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          if (board[row][col] === '.') {
+            for (let num = 1; num <= 9; num++) {
+              if (isSafe(board, row, col, num.toString())) {
+                board[row][col] = num.toString();
+                if (solve(board)) return true;
+                board[row][col] = '.'; // Backtrack
+              }
+            }
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    // Validate Sudoku rules
+    function isValid(board) {
+      const seen = new Set();
+      
+      // Check rows and columns
+      for (let i = 0; i < 9; i++) {
+        // Check row
+        seen.clear();
+        for (let j = 0; j < 9; j++) {
+          if (board[i][j] !== '.' && seen.has(board[i][j])) return false;
+          seen.add(board[i][j]);
+        }
+        
+        // Check column
+        seen.clear();
+        for (let j = 0; j < 9; j++) {
+          if (board[j][i] !== '.' && seen.has(board[j][i])) return false;
+          seen.add(board[j][i]);
+        }
+      }
+      
+      // Check 3x3 boxes
+      for (let boxRow = 0; boxRow < 3; boxRow++) {
+        for (let boxCol = 0; boxCol < 3; boxCol++) {
+          seen.clear();
+          for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 3; c++) {
+              const val = board[boxRow*3 + r][boxCol*3 + c];
+              if (val !== '.' && seen.has(val)) return false;
+              seen.add(val);
+            }
+          }
+        }
+      }
+      
+      return true;
+    }
+
+    // Handle form submission
+    document.getElementById('sudoku-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get current board state
+      const cells = document.querySelectorAll('.cell');
+      const board = [];
+      for (let row = 0; row < 9; row++) {
+        board[row] = [];
+        for (let col = 0; col < 9; col++) {
+          const val = cells[row*9 + col].value.trim();
+          board[row][col] = val === '' ? '.' : val;
+        }
+      }
+      
+      // Validate and solve
+      if (!isValid(board)) {
+        alert("Invalid Sudoku input! Check for duplicates.");
+        return;
+      }
+      
+      if (solve(board)) {
+        // Update solved board
+        for (let row = 0; row < 9; row++) {
+          for (let col = 0; col < 9; col++) {
+            cells[row*9 + col].value = board[row][col];
+          }
+        }
+        alert("Sudoku solved successfully!");
+      } else {
+        alert("No solution exists for this puzzle.");
+      }
+    });
+    
+    function showRules() {
+      window.location.href = "rules.html";
+    }
+  </script>
+</body>
+</html>
