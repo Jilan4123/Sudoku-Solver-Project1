@@ -44,7 +44,8 @@ git clone https://github.com/Jilan4123/Sudoku-Solver-Project1.git
 
 ## 📬 Contact
 
-If you want to connect or ask anything about this project, feel free to message me on [LinkedIn](www.linkedin.com/in/gouse-jilani-shaik-154032283)
+feel free to message me on [LinkedIn](https://www.linkedin.com/in/gouse-jilani-shaik-154032283)
+
 
 ---
 
